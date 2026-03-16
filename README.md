@@ -1,6 +1,7 @@
 # Learn Progress
 
-Catatan perjalanan gw belajar Python. 
+Ini adalah catatan perjalanan gw belajar Python. 
+otodidak with ai
 
 Gw bikin ini supaya bisa liat progress belajar gw dari nol. Fokus utama gw saat ini adalah **Data Engineering & Automation**. 
 
