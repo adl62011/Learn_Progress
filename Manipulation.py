@@ -1,4 +1,4 @@
-#Anggap ada klien lu yang butuh bantuan. Tugas lu sekarang adalah membuat script tugas_analisis.py untuk memproses file tersebut.
+#Anggap ada klien lu yang butuh bantuan. Tugas lu sekarang adalah membuat script tugas_analisis.py untuk memproses file tersebut yang berisi ribuan baris.
 
 #Misi Klien (Tugas lu):
 #Cleaning (Pembersihan):
