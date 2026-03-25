@@ -1,5 +1,4 @@
 
-
 import requests
 import json
 import time
@@ -98,7 +97,7 @@ class CryptoTracker:                              # SOAL 1A — Isi nama class-n
 
         # SOAL 3B — Tentukan emoji berdasarkan arah harga
         # Hint: "📈" kalau self.perubahan >= 0, kalau tidak "📉"
-        arah = "📉" if self.perubahan >= 0 else "📈"
+        arah = "📈" if self.perubahan >= 0 else "📉"
 
         waktu = datetime.now().strftime("%d %B %Y  %H:%M")
 
@@ -178,15 +177,18 @@ class PortfolioTracker(CryptoTracker):            # SOAL 4A — Isi nama class i
         self.tampilkan_info()
 
         nilai     = self.hitung_portfolio()
-        nilai_idr = self.jumlah_dimiliki * self.harga_idr
+
 
         print(f"\n  📊 PORTOFOLIO KAMU")
         print(f"  Jumlah dimiliki : {self.jumlah_dimiliki} {self.nama}")
         print(f"  Nilai (USD)     : $ {nilai:,.2f}")
-        print(f"  Nilai (IDR)     : Rp {nilai_idr:,.0f}")
+        # SESUDAH (aman)
+        if self.harga_idr is not None and self.harga_idr > 0:
+            nilai_idr = self.jumlah_dimiliki * self.harga_idr
+            print(f"  Nilai (IDR)     : Rp {nilai_idr:,.0f}")
+        else:
+            print(f"  Nilai (IDR)     : Data tidak tersedia")
         print("=" * 45)
-
-
 
 
 def bandingkan_koin(daftar_koin: list) -> None:
@@ -199,6 +201,9 @@ def bandingkan_koin(daftar_koin: list) -> None:
     if not koin_valid:
         print("⚠️  Tidak ada data.")
         return
+
+    jumlah_koin = len(koin_valid)
+    total_market_cap = 0
 
     print("\n" + "=" * 50)
     print("  📊 PERBANDINGAN HARGA CRYPTO")
@@ -230,40 +235,31 @@ def bandingkan_koin(daftar_koin: list) -> None:
 
 
 def ringkasan_pasar(daftar_koin: list) -> None:
-    """
-    TUGAS KAMU: Tulis seluruh isi fungsi ini dari nol!
-    Tidak ada kode yang perlu diisi — kamu yang buat semua.
-    """
     koin_valid = [k for k in daftar_koin if k.harga_usd is not None]
 
     if not koin_valid:
         print("⚠️  Tidak ada data koin untuk dirangkum.")
         return
 
-        # 2. Inisialisasi variabel penampung (Gudang sementara)
-        jumlah_koin = len(koin_valid)
-        total_market_cap = 0
-        total_perubahan = 0
+    # ✅ Sekarang sejajar dengan if — di LUAR blok if
+    jumlah_koin      = len(koin_valid)
+    total_market_cap = 0
+    total_perubahan  = 0
 
-        # 3. Loop: Ambil data dari SETIAP objek koin
-        for k in koin_valid:
-            total_market_cap += k.market_cap
-            total_perubahan += k.perubahan
+    for k in koin_valid:
+        total_market_cap += k.market_cap
+        total_perubahan  += k.perubahan
 
-        # 4. Hitung Rata-rata
-        rata_rata_24j = total_perubahan / jumlah_koin
+    rata_rata_24j = total_perubahan / jumlah_koin
+    mc_formatted  = f"$ {total_market_cap / 1_000_000_000_000:.2f} T"
 
-        # 5. Format Market Cap (Biar cantik pake T/Triliun)
-        # Angka dibagi 1 Triliun (10^12)
-        mc_formatted = f"$ {total_market_cap / 1_000_000_000_000:.2f} T"
+    print("\n" + "=" * 30)
+    print("=== RINGKASAN PASAR ===")
+    print(f"Koin dipantau    : {jumlah_koin}")
+    print(f"Rata-rata 24j    : {rata_rata_24j:+.2f}%")
+    print(f"Total market cap : {mc_formatted}")
+    print("=" * 30)
 
-        # 6. CETAK OUTPUT (Sesuai harapan soal)
-        print("\n" + "=" * 30)
-        print("=== RINGKASAN PASAR ===")
-        print(f"Koin dipantau    : {jumlah_koin}")
-        print(f"Rata-rata 24j    : {rata_rata_24j:+.2f}%")
-        print(f"Total market cap : {mc_formatted}")
-        print("=" * 30)
 
     # ??? TULIS KODE KAMU DI SINI ???
         # Hapus 'pass' ini kalau sudah mulai nulis kode
@@ -278,15 +274,16 @@ if __name__ == "__main__":
 
     # -- DEMO 1: Class dasar --
     print("\n📌 DEMO 1: Buat object dan ambil harga")
-    bitcoin  = CryptoTracker("bitcoin",  "Bitcoin")
-    ethereum = CryptoTracker("ethereum", "Ethereum")
+    bitcoin  = CryptoTracker("bitcoin",  "BTC")
+    ethereum = CryptoTracker("ethereum", "ETH")
+    solana = CryptoTracker("solana", "SOL")
 
 
-    semua = [bitcoin, ethereum]
+    semua = [bitcoin, ethereum, solana]
 
     for koin in semua:
         koin.ambil_harga()
-        time.sleep(1)   # Jeda agar tidak kena rate limit API
+        time.sleep(3)   # Jeda agar tidak kena rate limit API
 
     bitcoin.tampilkan_info()
 
@@ -296,9 +293,13 @@ if __name__ == "__main__":
 
     # -- DEMO 3: Portfolio tracker --
     print("\n📌 DEMO 3: Hitung portofolio")
-    my_btc = PortfolioTracker("bitcoin", "Bitcoin", jumlah_dimiliki=0.01)
-    my_btc.ambil_harga()
-    my_btc.tampilkan_portfolio()
+    my_btc = PortfolioTracker("bitcoin", "BTC", jumlah_dimiliki=0.01) # jumlahnya
+    my_btc.harga_usd = bitcoin.harga_usd  # Salin langsung dari object bitcoin
+    my_btc.harga_idr = bitcoin.harga_idr
+    my_btc.market_cap = bitcoin.market_cap
+    my_btc.volume_24h = bitcoin.volume_24h
+    my_btc.perubahan = bitcoin.perubahan
+    my_btc.tampilkan_portfolio()  # Langsung tampilkan, tidak perlu ambil_harga()
 
     # -- DEMO 4: Bonus --
     print("\n📌 DEMO 4: Ringkasan pasar (SOAL BONUS)")
