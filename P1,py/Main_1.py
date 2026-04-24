@@ -18,7 +18,7 @@ df = pd.DataFrame(data)
 df.to_csv('energy_data_100k.csv', index=False)
 print("✅ Berhasil membuat 'energy_data_100k.csv' dengan 100,000 baris!")
 
-# --- 2. ANALISIS PANDAS + NUMPY (THE PROFESSIONAL WAY) ---
+# --- 2. ANALISIS PANDAS + NUMPY  ---
 
 # Hitung Efisiensi pake NumPy Vectorization (Cepat!)
 # Rumus: (Energy / Operating Hours) - Penalti suhu jika > 85
