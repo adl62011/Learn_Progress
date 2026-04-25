@@ -1,19 +1,19 @@
 import pandas as pd
 
-df = pd.read_csv('data_test.csv')
+def data_manipulation():
+    df = pd.read_csv('data_test(100krows).csv')
 
-df['Efficiency'] = df['Energy_Output'] / df['Operating_Hours']
+    df['Efficiency'] = df['Energy_Output'] / df['Operating_Hours']
 
-df['Status'] = 'NORMAL'
+    df['Status'] = 'NORMAL'
 
-df.loc[df['Temperature'] > 85, 'Status'] = 'OVERHEAT'
+    df.loc[df['Temperature'] > 85, 'Status'] = 'OVERHEAT'
 
-#Filtering Missing Data
+    #Filtering Missing Data
 
-df['Machine_ID'] = df['Machine_ID'].fillna('Turbine_C')
+    df['Machine_ID'] = df['Machine_ID'].fillna('Turbine_C')
 
+    # Agreggration
+    print(df.groupby('Machine_ID')[['Temperature', 'Efficiency']].mean().reset_index())
 
-# Agreggration
-print(df.groupby('Machine_ID')[['Temperature', 'Efficiency']].mean().reset_index())
-
-
+    return df
