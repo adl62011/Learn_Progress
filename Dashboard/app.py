@@ -1,5 +1,4 @@
 import streamlit as st
-import pandas as pd
 from Data import load_and_process_data
 from plots import plot_sunburst_donut, plot_revenue_bar
 
@@ -42,23 +41,12 @@ def main():
     st.title(" Tech-Hardware Executive Dashboard")
     st.markdown("Analisis performa penjualan dengan antarmuka visual kelas enterprise.")
 
-# Sidebar
-    st.sidebar.markdown("### 📊 Status Data")
-    
-    # Path otomatis: mencari file di folder yang sama dengan app.py
-    import os
-    base_path = os.path.dirname(__file__)
-    file_path = os.path.join(base_path, "Progress/Dashboard/FinancialData_Dummy.csv") # Pastikan nama file di GitHub "dataset.csv"
+    # Sidebar
+    st.sidebar.markdown("### ⚙️ Upload Data")
+    uploaded_file = st.sidebar.file_uploader("Upload dataset CSV", type=['csv'])
 
-    if os.path.exists(file_path):
-        df = pd.read_csv(file_path)
-        st.sidebar.success("✅ Data loaded otomatis")
-    else:
-        st.sidebar.error("❌ File dataset.csv tidak ditemukan")
-        st.stop() # Berhenti di sini biar gak error ke bawah
-
-    if file_path is not None:
-        data = load_and_process_data(file_path)
+    if uploaded_file is not None:
+        data = load_and_process_data(uploaded_file)
 
         # ---------------- GRID LAYOUT ----------------
         # Membagi layar menjadi 2 kolom (Kiri 60% : Kanan 40%)
