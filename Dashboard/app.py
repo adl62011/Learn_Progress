@@ -48,7 +48,7 @@ def main():
     # Path otomatis: mencari file di folder yang sama dengan app.py
     import os
     base_path = os.path.dirname(__file__)
-    file_path = os.path.join(base_path, "FinacialData_Dummy.csv") # Pastikan nama file di GitHub "dataset.csv"
+    file_path = os.path.join(base_path, "Progress/Dashboard/FinancialData_Dummy.csv") # Pastikan nama file di GitHub "dataset.csv"
 
     if os.path.exists(file_path):
         df = pd.read_csv(file_path)
