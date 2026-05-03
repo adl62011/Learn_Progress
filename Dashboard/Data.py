@@ -4,6 +4,9 @@ def load_and_process_data(file_path):
     df = pd.read_csv(file_path)
     
     df['Tanggal'] = pd.to_datetime(df['Tanggal'])
+    df['Bulan'] = df['Tanggal'].dt.to_period('M').astype(str)
+
+    mothly_revenue = df.groupby('Bulan')['Total_Transaksi'].sum().reset_index()
 
     revenue_per_kategori = df.groupby('Kategori')['Total_Transaksi'].sum().reset_index()
     total_revenue = df['Total_Transaksi'].sum()
@@ -15,7 +18,9 @@ def load_and_process_data(file_path):
     kategori_paling_laris = terlaris.iloc[0]['Kategori'] if not terlaris.empty else "-"
 
     rata2_penjualan = df['Total_Transaksi'].mean().round()
-    standar_deviasi = df['Total_Transaksi'].std() 
+    standar_deviasi = df['Total_Transaksi'].std().round() 
+
+    
 
     return {
         'df_raw': df,
@@ -26,5 +31,6 @@ def load_and_process_data(file_path):
         'terlaris': terlaris,
         'kategori_paling_laris': kategori_paling_laris,
         'rata2_penjualan': rata2_penjualan,
-        'standar_deviasi': standar_deviasi
+        'standar_deviasi': standar_deviasi,
+        'monthly_rev' : mothly_revenue
     }

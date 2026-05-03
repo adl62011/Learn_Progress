@@ -7,13 +7,15 @@ def plot_sunburst_donut(df_terlaris):
         df_terlaris, 
         values='Total_Transaksi', 
         names='Kategori', 
-        hole=0.6, # Inilah yang membuatnya "bolong"
+        hole=0.5, # Inilah yang membuatnya "bolong"
         color_discrete_sequence=['#FFFFFF', '#E6E6FA', '#D8BFD8', '#BA55D3', '#8A2BE2']
     )
     
     fig.update_traces(
         textposition='inside', 
-        textinfo='percent+label',
+        textinfo='label+percent',
+        insidetextorientation='horizontal',
+        textfont=dict(family="Inter, Segoe UI", size=18, color='black'),
         marker=dict(line=dict(color='#2b0054', width=2))
     )
     
@@ -37,7 +39,7 @@ def plot_revenue_bar(df_revenue):
         y='Total_Transaksi', 
         color='Total_Transaksi',
         # Color Scale: Ungu Gelap -> Ungu Muda -> Putih
-        color_continuous_scale=['#4B0082', '#BA55D3', '#FFFFFF'], 
+        color_continuous_scale=["#7C29B7", '#BA55D3', '#FFFFFF'], 
         text_auto='.2s'
     )
     
@@ -58,4 +60,42 @@ def plot_revenue_bar(df_revenue):
         coloraxis_showscale=False, # Sembunyikan legenda gradasi agar UI lebih bersih
         margin=dict(t=50, b=20, l=20, r=20)
     )
+    return fig
+
+def plot_statistics(df_performa_penjualan):
+    fig = px.line(
+        df_performa_penjualan,
+        x='Bulan',
+        y='Total_Transaksi',
+        markers=True,
+        template="plotly_dark"
+    )
+
+    fig.update_traces(
+        line=dict(color="#9700BD", width=4), # Warna ungu cerah agar kontras dengan background
+        marker=dict(size=10, color='white', symbol='circle'),
+        hovertemplate='<b>Bulan:</b> %{x}<br><b>Omset:</b> Rp %{y:,.0f}<extra></extra>'
+    )
+
+    fig.update_layout(
+        title=dict(
+            text='Tren Penjualan Bulanan',
+            font=dict(family="Inter, Segoe UI", size=20, color='white')
+        ),
+        xaxis=dict(
+            title='',
+            tickfont=dict(family="Inter, Segoe UI", color='white'),
+            gridcolor='rgba(255,255,255,0.1)' # Grid tipis transparan
+        ),
+        yaxis=dict(
+            title='Total Penjualan',
+            tickfont=dict(family="Inter, Segoe UI", color='white'),
+            gridcolor='rgba(255,255,255,0.1)',
+            tickprefix='Rp '
+        ),
+        plot_bgcolor='rgba(0,0,0,0)', # Transparan agar menyatu dengan dashboard
+        paper_bgcolor='rgba(0,0,0,0)',
+        margin=dict(t=50, b=20, l=20, r=20)
+    )
+
     return fig

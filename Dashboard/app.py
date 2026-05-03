@@ -1,7 +1,7 @@
 import streamlit as st
 import os
 from Data import load_and_process_data
-from plots import plot_sunburst_donut, plot_revenue_bar
+from plots import plot_sunburst_donut, plot_revenue_bar, plot_statistics
 
 # 1. Konfigurasi Halaman (Wajib dipanggil pertama)
 st.set_page_config(page_title="Sales Dashboard", page_icon="✨", layout="wide")
@@ -94,11 +94,13 @@ def main():
             kpi5.metric("Total Kas", f"Rp {data['total_kas']:,.0f}")
             kpi6.metric("Total Piutang", f"Rp {data['total_piutang']:,.0f}")
             
-
             st.markdown("---")
 
             # Menampilkan info baris datastreamlit 
             st.caption(f"Total baris data diproses: {len(data['df_raw'])} baris.")
+
+            fig_line = plot_statistics(data['monthly_rev'])
+            st.plotly_chart(fig_line, use_container_width=True)
 
     else:
         st.info("Silakan masukkan file CSV pada panel di sebelah kiri untuk merender antarmuka.")
