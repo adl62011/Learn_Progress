@@ -35,6 +35,7 @@ st.markdown("""
     div[data-testid="stMetricValue"] {
         color: #FFFFFF !important;
     }
+            
     </style>
 """, unsafe_allow_html=True)
 
